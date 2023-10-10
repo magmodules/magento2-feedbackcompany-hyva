@@ -1,5 +1,5 @@
 
-![magento-feedbackcompany-hyva](https://github.com/magmodules/magento2-feedbackcompany-hyva-dev/assets/24823946/4ef0a776-adb4-478c-b445-0091e25d6639)
+![magento-feedbackcompany-hyva](https://github.com/magmodules/magento2-feedbackcompany-hyva/assets/24823946/6084074b-36bf-43e3-a34c-cdd6c2dcbc09)
 
 # The Feedback Company Hyvä Compatibility plugin
 
@@ -12,7 +12,7 @@ The Feedback Company plugin Hyvä Compatibility plugin for the Magento Hyva them
 - [Magmodules The Feedback Company Reviews](https://www.magmodules.eu/magento2-feedbackcompany-reviews.html)    
 
 
-<img width="1054" alt="feedbackcompany-magento-plugin" src="https://github.com/magmodules/magento2-feedbackcompany-hyva-dev/assets/24823946/08619509-0bdb-45f3-bc01-b0c36e4492d2">
+<img width="1054" alt="feedbackcompany-magento-plugin" src="https://github.com/magmodules/magento2-feedbackcompany-hyva/assets/24823946/282a1ced-88a7-483d-9751-b5c0bb45cb85">
 
 
 
