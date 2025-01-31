@@ -1,0 +1,162 @@
+<?php declare(strict_types=1);
+/**
+ * Copyright © Magmodules.eu. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+ use Magmodules\FeedbackCompanySR\Block\Widget\Review\Badge;
+ use Magento\Framework\Escaper;
+ use Hyva\Theme\ViewModel\HeroiconsOutline;
+ use Hyva\Theme\Model\ViewModelRegistry;
+
+/** @var Badge $block */
+/** @var Escaper $escaper */
+/** @var HeroiconsOutline $heroicons */
+
+$uniqId = $block->getUniqueId();
+$reviewsCount = $block->getReviewsCount();
+$reviewsCurrentRating = $block->getReviewsCurrentRating();
+$reviewsMaxRating = $block->getReviewsMaxRating();
+
+$reviewsLabel = $reviewsCount > 1 ? __('%1 reviews', $reviewsCount) : __('%1 review', $reviewsCount);
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+?>
+
+<div x-data="BadgeWidget_<?= $uniqId ?>">
+    <section data-element="feedbackcompany-badge-widget-<?= $uniqId; ?>" 
+             @click="show = !show"
+             class="inline-grid gap-2 px-3 py-4 bg-white border border-gray-200 shadow rounded-xl
+                    group <?= !$block->showReviewLink() ? 'cursor-default': 'cursor-pointer' ?>">
+
+        <?php if ($block->showLogo() || $block->showStars()): ?>
+            <div data-element="box-summary" 
+                class="flex items-center gap-7 
+                        <?= $block->showLogo() && $block->showStars() ? 'justify-between' : 'justify-center'; ?>">
+
+                <?php if ($block->showLogo()): ?>
+                    <img src="<?= $escaper->escapeUrl($block->getBigLogoUrl()); ?>" width="83" height="28"
+                         alt="<?= $escaper->escapeHtml(__('Feedback Company badge widget')); ?>" />
+                <?php endif; ?>
+
+                <?php if ($block->showStars()): ?>
+                    <?= $block->getLayout()
+                            ->createBlock('Magento\Framework\View\Element\Template')
+                            ->setTemplate('Magmodules_HyvaFeedbackCompanySR::widget/helper/stars.phtml')
+                            ->setData('svgSize', '22')
+                            ->setData('percent', $reviewsCurrentRating / $reviewsMaxRating * 100)
+                            ->toHtml();
+                    ?>
+                <?php endif;?>
+            </div>
+        <?php endif;?>
+
+        <div data-element="box-information" 
+            class="flex gap-5 text-sm <?= $block->showReviewLink() ? 'justify-between': 'justify-center' ?>">
+            <div>
+                <?= $escaper->escapeHtml(__('<b>%1</b> based on <b>%2</b>', $reviewsCurrentRating, $reviewsLabel), ['b']); ?>
+            </div>
+
+            <?php if ($block->showReviewLink()): ?>
+                <span data-element="link-icon" class="h-5 text-blue-500 transition-colors duration-300 group-hover:text-blue-700">
+                    <?= $heroicons->externalLinkHtml('', 20, 20, ["style" => "stroke-width: 1.5"]); ?>
+                </span>
+            <?php endif;?>
+        </div>
+    </section>
+
+    <?php if ($block->showReviewLink()): ?>
+        <div data-element="feedbackcompany-badge-reviews-<?= $uniqId; ?>"
+             class="fixed z-50 w-[90%] duration-300 h-full
+             <?= $block->getShowReviews() == 'popup' 
+                ? 'top-1/2 left-1/2 max-w-[480px] max-h-[90vh] transition-opacity 
+                -translate-x-1/2 -translate-y-1/2 [&>div]:max-h-[90vh] [&>div]:rounded-xl' 
+                : 'top-0 right-0 h-screen max-w-[400px] [&>div]:max-h-screen transition-transform' ?>"
+
+              style="display: none;"
+              x-show="show"
+              x-transition:enter="ease-in-out duration-300"
+              x-transition:enter-start="<?= $block->getShowReviews() == 'popup' ? 'opacity-0 invisible' : 'translate-x-[105%]'; ?>"
+              x-transition:enter-end="<?= $block->getShowReviews() == 'popup' ? 'opacity-100 visible' : 'translate-x-0'; ?>"
+              x-transition:leave="ease-in-out duration-300"
+              x-transition:leave-start="<?= $block->getShowReviews() == 'popup' ? 'opacity-100 visible' : 'translate-x-0'; ?>"
+              x-transition:leave-end="<?= $block->getShowReviews() == 'popup' ? 'opacity-0 invisible' : 'translate-x-[105%]'; ?>">
+
+            <div class="grid grid-rows-[auto_1fr] h-full min-h bg-white border border-gray-200">
+                <div data-element="reviews-summary" 
+                    class="relative grid grid-cols-[60px_1fr] gap-4 p-4 border-b border-gray-200">
+
+                    <img src="<?= $escaper->escapeUrl($block->getSmallLogoUrl()); ?>" width="60" height="60"
+                         alt="<?= $escaper->escapeHtml(__('Feedback Company badge widget')); ?>" />
+
+                    <div>
+                        <div data-element="reviews-summary-stars" class="-ml-1.5">
+                            <?= $block->getLayout()
+                                ->createBlock('Magento\Framework\View\Element\Template')
+                                ->setTemplate('Magmodules_HyvaFeedbackCompanySR::widget/helper/stars.phtml')
+                                ->setData('svgSize', '30')
+                                ->setData('percent', $reviewsCurrentRating / $reviewsMaxRating * 100)
+                                ->toHtml();
+                            ?>
+                        </div>
+
+                        <div data-element="reviews-summary-text" class="text-gray-700 text-sm [&_b]:text-[#ffad0f]">
+                            <?= $escaper->escapeHtml(__('Rated with <b>%1</b> based on <b>%2</b>', $reviewsCurrentRating, $reviewsLabel), ['b']); ?>
+                        </div>
+                    </div>
+
+                    <span data-element="close" @click="show = !show"
+                          class="absolute top-3 right-3 opacity-50 cursor-pointer
+                                transition-opacity hover:opacity-100">
+                        <?= $heroicons->xHtml('', 24, 24); ?>
+                    </span>
+                </div>
+
+                <div data-element="reviews" class="h-full overflow-auto max-h-[calc(100%-10px)]">
+                    <?php foreach ($reviews = $block->getReviews() as $review): ?>
+                        <div data-element="review-item"
+                            class="grid gap-2.5 p-5 border-b border-gray-200 last:border-b-0">
+
+                            <b class="name text-base"><?= $escaper->escapeHtml($review['name']) ?></b>
+                            <div class="summary flex gap-3 -ml-0.5">
+                                <?= $block->getLayout()
+                                    ->createBlock('Magento\Framework\View\Element\Template')
+                                    ->setTemplate('Magmodules_HyvaFeedbackCompanySR::widget/helper/stars.phtml')
+                                    ->setData('svgSize', '18')
+                                    ->setData('percent', floatval($review['total']) / $reviewsMaxRating * 100)
+                                    ->toHtml();
+                                ?>
+
+                                <span class="opacity-60 text-sm"><?= $escaper->escapeHtml($review['created']) ?></span>
+                            </div>
+                            <div class="comment text-sm leading-6 text-gray-500">
+                                <?= $escaper->escapeHtml($review['comment']) ?>
+                            </div>
+                        </div>
+                    <?php endforeach;?>
+                </div>
+            </div>
+        </div>
+
+        <span data-element="feedbackcompany-badge-overlay-<?= $uniqId; ?>" 
+              @click="show = !show"
+              class="fixed top-0 right-0 bottom-0 left-0 z-40 bg-black/40"
+              style="display: none;"
+              x-show="show"
+              x-transition:enter="ease-in-out duration-300"
+              x-transition:enter-start="opacity-0 invisible"
+              x-transition:enter-end="opacity-100 visible"
+              x-transition:leave="ease-in-out duration-300"
+              x-transition:leave-start="opacity-100 visible"
+              x-transition:leave-end="opacity-0 invisible"></span>
+    <?php endif;?>
+</div>
+
+<script>
+    'use strict';
+
+    function BadgeWidget_<?= $uniqId ?>() {
+        return {
+            show: false,
+        }
+    }
+</script>

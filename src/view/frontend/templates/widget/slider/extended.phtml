@@ -21,7 +21,7 @@ $logo = $block->getViewFileUrl('Magmodules_FeedbackCompanySR::images/logo.png');
 <section class="feedbackcompan-widget-slider extended-slider" x-data="initReviewSlider_<?= $uniqId ?>">
     <?php if ($block->getTitle()): ?>
         <h3 class="text-xl font-semibold tracking-wider text-stone-700 mb-4 text-center">
-            <?= $block->escapeHtml($block->getTitle()) ?>
+            <?= $escaper->escapeHtml($block->getTitle()) ?>
         </h3>
     <?php endif; ?>
 
@@ -76,7 +76,7 @@ $logo = $block->getViewFileUrl('Magmodules_FeedbackCompanySR::images/logo.png');
                                         </span>
 
                                         <span class="filling-starts absolute top-0 text-[#313d50] overflow-hidden"
-                                                style="width: <?= $block->escapeHtml(__('%1%', $review['total']*20)); ?>">
+                                                style="width: <?= $escaper->escapeHtml(__('%1%', $review['total']*20)); ?>">
 
                                             <span class="inline-flex">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -100,15 +100,15 @@ $logo = $block->getViewFileUrl('Magmodules_FeedbackCompanySR::images/logo.png');
                                 </div>
                                 <div class="review-info text-stone-700 overflow-hidden text-sm"
                                     style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;">
-                                    <?= $block->escapeHtml($review['comment']) ?>
+                                    <?= $escaper->escapeHtml($review['comment']) ?>
                                 </div>
                             </div>
 
                             <div class="flex items-center gap-3 pt-5 mt-auto">
-                                <img src="<?= $block->escapeUrl($logo); ?>" width="40" alt="FeedbackCompany review">
+                                <img src="<?= $escaper->escapeUrl($logo); ?>" width="40" alt="FeedbackCompany review">
                                 <div class="flex flex-col gap-[2px]">
-                                    <span class="opacity-80 text-sm"><?= $block->escapeHtml($review['name']) ?></span>
-                                    <span class="opacity-50 text-xs italic"><?= $block->escapeHtml($review['created']) ?></span>
+                                    <span class="opacity-80 text-sm"><?= $escaper->escapeHtml($review['name']) ?></span>
+                                    <span class="opacity-50 text-xs italic"><?= $escaper->escapeHtml($review['created']) ?></span>
                                 </div>
                             </div>
                         </div>
@@ -152,12 +152,12 @@ $logo = $block->getViewFileUrl('Magmodules_FeedbackCompanySR::images/logo.png');
         <footer class="feedbackcompan-widget-footer mt-4 text-center">
             <?php foreach ($accountInfo as $account): ?>
                 <aside class="text-sm text-stone-700">
-                    <?= $block->escapeHtml(__('Reviewed with a score of ')) ?>
-                    <b><?= $block->escapeHtml($account['avgRatingScore']) ?></b>
-                    <?= $block->escapeHtml(__(' based on ')) ?>
+                    <?= $escaper->escapeHtml(__('Reviewed with a score of ')) ?>
+                    <b><?= $escaper->escapeHtml($account['avgRatingScore']) ?></b>
+                    <?= $escaper->escapeHtml(__(' based on ')) ?>
                     <a  class="text-[#313d50] text-sm transition-opacity duration-300 hover:opacity-80 underline underline-offset-2"
-                        href="<?= $block->escapeUrl($block->getUrl('feedbackcompan')); ?>">
-                        <?= $block->escapeHtml(__('%1 reviews', $account['total'])) ?>
+                        href="<?= $escaper->escapeUrl($block->getUrl('feedbackcompan')); ?>">
+                        <?= $escaper->escapeHtml(__('%1 reviews', $account['total'])) ?>
                     </a>
                 </aside>
             <?php endforeach; ?>
