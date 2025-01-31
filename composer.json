@@ -9,7 +9,7 @@
     "require": {
       "magento/framework": "*",
       "hyva-themes/magento2-compat-module-fallback": "*",
-      "magmodules/magento2-feedbackcompany": "*"
+      "magmodules/magento2-feedbackcompany": ">=1.7.0"
     },
     "autoload": {
       "files": [
